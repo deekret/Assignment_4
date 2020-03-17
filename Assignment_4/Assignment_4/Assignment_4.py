@@ -68,26 +68,21 @@ image_gen_train = ImageDataGenerator(rotation_range=45,
                                      zoom_range=0.5)
 validation_image_generator = ImageDataGenerator() # Generator for our validation data
 
-
-#image_gen_train.fit(train_images)                                   # adds generated images to the train_images 
 train_data_gen = image_gen_train.flow(train_images, train_labels)
 #validation_data_gen = validation_image_generator.flow(validation_images, validation_labels)  
 
 
 #model = models.createModel1()
-model = models.createModel2()
-#model = models.createModel3()
+#model = models.createModel2()
+model = models.createModel3()
 
-def scheduler(epoch):
-    initial_learning_rate = 0.001
-    epochs_drop = 15
-    if epoch % 15 == 0:
-        drop = 0.1
-        learning_rate = initial_learning_rate * math.pow(drop, math.floor((1+epoch)/epochs_drop))
-        print('\n\n current learning rate: ', learning_rate, '\n\n')
-        return learning_rate
-    else:
-        return initial_learning_rate
+step = 0
+def scheduler(epoch, lr):
+    if (((epoch + step) % 15 == 0) and (epoch + step) != 0):
+        lr = lr * 0.1
+    print("epoch: ", epoch + step)
+    print("lr : ", lr)
+    return lr
 
 callback = tf.keras.callbacks.LearningRateScheduler(scheduler)
 
@@ -107,21 +102,29 @@ def appendHistoryValues(history):
         train_val_loss.append(item)
 
 num_epochs = 10
+print("read the learning rate ---> ", keras.backend.eval(model.optimizer.lr))
 
 #history = model.fit(train_data_gen, callbacks=[callback], validation_data=(validation_images,validation_labels), epochs = num_epochs)
-#appendHistoryValues(history_1)
+#appendHistoryValues(history)
+
 
 #history = model.fit(train_data_gen, callbacks=[callback], validation_data=(validation_images,validation_labels), epochs = num_epochs)
 #appendHistoryValues(history)
 
 history = model.fit(train_images, train_labels, callbacks=[callback], validation_data=(validation_images,validation_labels), epochs = num_epochs)
 appendHistoryValues(history)
+step += num_epochs
 
 #history = model.fit(train_images, train_labels, callbacks=[callback], validation_data=(validation_images,validation_labels), epochs = num_epochs)
 #appendHistoryValues(history)
 
 #history = model.fit(train_data_gen, callbacks=[callback], validation_data=(validation_images,validation_labels), epochs = num_epochs)
 #appendHistoryValues(history)
+#step += 10
+
+history = model.fit(train_images, train_labels, callbacks=[callback], validation_data=(validation_images,validation_labels), epochs = num_epochs)
+appendHistoryValues(history)
+step += num_epochs
 
 #history = model.fit(train_images, train_labels, callbacks=[callback], validation_data=(validation_images,validation_labels), epochs = num_epochs)
 #appendHistoryValues(history)
@@ -129,12 +132,16 @@ appendHistoryValues(history)
 #history = model.fit(train_images, train_labels, callbacks=[callback], validation_data=(validation_images,validation_labels), epochs = num_epochs)
 #appendHistoryValues(history)
 
-#history = model.fit(train_images, train_labels, callbacks=[callback], validation_data=(validation_images,validation_labels), epochs = num_epochs)
-#appendHistoryValues(history)
+#for x in range(num_epochs):
+#    learning_rate = keras.backend.eval(model.optimizer.lr)
+#    if (epoch_counter % 15 == 0) # applpy learning rate
+#    if (epoch_counter % 20 == 0) #data_augmentation
+#    else history = model.fit(train_data_gen, callbacks=[callback], validation_data=(validation_images,validation_labels), epochs = 1)
+#    epoch_counteer+=1
 
 model.save("model1_weights.h5")
 
-epochs_range = range(num_epochs*1)
+epochs_range = range(num_epochs*4)
 
 plt.figure(figsize=(8, 8))
 plt.subplot(1, 2, 1)
