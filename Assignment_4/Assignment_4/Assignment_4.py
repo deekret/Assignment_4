@@ -12,6 +12,9 @@ import matplotlib.pyplot as plt
 import os
 #os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 import math
+import models
+import imp
+imp.reload(models)
 
 print(tf.__version__)
 
@@ -71,24 +74,9 @@ train_data_gen = image_gen_train.flow(train_images, train_labels)
 #validation_data_gen = validation_image_generator.flow(validation_images, validation_labels)  
 
 
-model = keras.Sequential()
-model.add(keras.layers.Conv2D(32, kernel_size=3, padding='same', activation='relu', input_shape=(IMG_WIDTH,IMG_HEIGHT,1)))
-model.add(keras.layers.MaxPooling2D((2, 2)))
-model.add(keras.layers.Conv2D(64, kernel_size=3, padding='same', activation='relu'))
-model.add(keras.layers.MaxPooling2D((2, 2)))
-model.add(keras.layers.Conv2D(64, kernel_size=3, padding='same', activation='relu'))
-model.add(keras.layers.Flatten())
-model.add(keras.layers.Dense(64, activation='relu'))
-model.add(keras.layers.Dense(10, activation='softmax'))
-
-our_optimizer = tf.keras.optimizers.Adam()
-model.compile(optimizer=our_optimizer,
-            loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-            metrics=['accuracy'])
-
-model.summary()
-
-#history = model.fit(train_data_gen, steps_per_epoch = 60000 // batch_size, epochs = 10, validation_data=validation_data_gen, max_queue_size=50, workers=4, use_multiprocessing=False)
+#model = models.createModel1()
+model = models.createModel2()
+#model = models.createModel3()
 
 def scheduler(epoch):
     initial_learning_rate = 0.001
@@ -121,7 +109,7 @@ def appendHistoryValues(history):
 num_epochs = 10
 
 #history = model.fit(train_data_gen, callbacks=[callback], validation_data=(validation_images,validation_labels), epochs = num_epochs)
-#appendHistoryValues(history)
+#appendHistoryValues(history_1)
 
 #history = model.fit(train_data_gen, callbacks=[callback], validation_data=(validation_images,validation_labels), epochs = num_epochs)
 #appendHistoryValues(history)
