@@ -27,22 +27,31 @@ def createModel1():
     #keras.utils.plot_model(model, 'model1.png', show_shapes=True)
     return model
 
+def conv_block(x):
+    #x = keras.layers.BatchNormalization()
+    x = keras.layers.Conv2D(32, kernel_size=3, padding='same', activation='relu')(x)
+    x = keras.layers.Dropout(0.2)(x)
+    return x
+
+
 def createModel2():
     inputs = tf.keras.Input(shape=(IMG_WIDTH,IMG_HEIGHT,1))
-    x = keras.layers.Conv2D(32, kernel_size=3, padding='same', activation='relu')(inputs)
+    x = keras.layers.Conv2D(64, kernel_size=5, padding='same',strides = (2,2), activation='relu')(inputs)
     x = keras.layers.MaxPooling2D((2, 2))(x)
     x_residual = x
     x_dense = x
-    x = keras.layers.Conv2D(64, kernel_size=3, padding='same', activation='relu')(x)
-    x = keras.layers.Conv2D(32, kernel_size=3, padding='same', activation='relu')(x)
+    x = keras.layers.Conv2D(32, kernel_size=5, padding='same', activation='relu')(x)
+    x = keras.layers.Conv2D(64, kernel_size=5, padding='same', activation='relu')(x)
+
     x = keras.layers.add([x, x_residual])
 
-    x = keras.layers.Concatenate()([x, x_dense])
+    for i in range(4):
+        cb = conv_block(x)
+        x = keras.layers.Concatenate()([x, cb])
 
-    #x = keras.layers.MaxPooling2D((2, 2))(x)
-    x = keras.layers.Conv2D(64, kernel_size=3, padding='same', activation='relu')(x)
+    x = keras.layers.Conv2D(64, kernel_size=5, padding='same', activation='relu')(x)
     x = keras.layers.Flatten()(x)
-    x = keras.layers.Dense(64, activation='relu')(x)
+    x = keras.layers.Dense(32, activation='relu')(x)
     outputs = keras.layers.Dense(10, activation='softmax')(x)
 
     model = keras.Model(inputs=inputs, outputs=outputs)
@@ -53,8 +62,6 @@ def createModel2():
                 metrics=['accuracy'])
 
     model.summary()
-    #keras.utils.plot_model(model, 'model2.png', show_shapes=True)
-    #tf.keras.utils.visualize_util.plot(model, 'model2.png', show_shapes=True)
     return model
 
 def createModel3():
