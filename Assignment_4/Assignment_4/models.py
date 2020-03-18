@@ -8,7 +8,7 @@ IMG_HEIGHT = 28
 IMG_WIDTH = 28
 
 def createModel1():
-    name = model_1
+    name = "model_1"
     model = keras.Sequential() 
     model.add(keras.layers.Conv2D(32, kernel_size=3, padding='same', activation='relu', input_shape=(IMG_WIDTH,IMG_HEIGHT,1)))
     model.add(keras.layers.MaxPooling2D((2, 2)))
@@ -36,6 +36,7 @@ def conv_block(x):
 
 
 def createModel2():
+    name = "model_2"
     inputs = tf.keras.Input(shape=(IMG_WIDTH,IMG_HEIGHT,1))
     x = keras.layers.Conv2D(64, kernel_size=5, padding='same',strides = (2,2), activation='relu')(inputs)
     x = keras.layers.MaxPooling2D((2, 2))(x)
@@ -63,9 +64,10 @@ def createModel2():
                 metrics=['accuracy'])
 
     model.summary()
-    return model
+    return model, name
 
 def createModel3():
+    name = "model_3"
     inputs = keras.Input(shape=(IMG_WIDTH, IMG_HEIGHT, 1))
     x = keras.layers.Conv2D(32, kernel_size=3, activation='relu')(inputs)
     x = keras.layers.Conv2D(64, kernel_size=3, activation='relu')(x)
@@ -93,4 +95,4 @@ def createModel3():
                 metrics=['accuracy'])
 
     model.summary()
-    return model
+    return model, name
