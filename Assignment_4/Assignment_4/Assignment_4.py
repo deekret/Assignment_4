@@ -101,39 +101,44 @@ def appendHistoryValues(history):
     for item in history.history['val_loss']:
         train_val_loss.append(item)
 
-num_epochs = 1
+num_epochs = 5
 print("read the learning rate ---> ", keras.backend.eval(model.optimizer.lr))
 
-#history = model.fit(train_data_gen, callbacks=[callback], validation_data=(validation_images,validation_labels), epochs = num_epochs)
-#appendHistoryValues(history)
+history = model.fit(train_data_gen, callbacks=[callback], validation_data=(validation_images,validation_labels), epochs = num_epochs)
+appendHistoryValues(history)
+step += num_epochs
 
-#history = model.fit(train_data_gen, callbacks=[callback], validation_data=(validation_images,validation_labels), epochs = num_epochs)
-#appendHistoryValues(history)
+history = model.fit(train_data_gen, callbacks=[callback], validation_data=(validation_images,validation_labels), epochs = num_epochs)
+appendHistoryValues(history)
+step += num_epochs
 
 history = model.fit(train_images, train_labels, callbacks=[callback], validation_data=(validation_images,validation_labels), epochs = num_epochs)
 appendHistoryValues(history)
 step += num_epochs
 
-#history = model.fit(train_images, train_labels, callbacks=[callback], validation_data=(validation_images,validation_labels), epochs = num_epochs)
-#appendHistoryValues(history)
+history = model.fit(train_images, train_labels, callbacks=[callback], validation_data=(validation_images,validation_labels), epochs = num_epochs)
+appendHistoryValues(history)
+step += num_epochs
 
-#history = model.fit(train_data_gen, callbacks=[callback], validation_data=(validation_images,validation_labels), epochs = num_epochs)
-#appendHistoryValues(history)
-#step += 10
+history = model.fit(train_data_gen, callbacks=[callback], validation_data=(validation_images,validation_labels), epochs = num_epochs)
+appendHistoryValues(history)
+step += num_epochs
 
-#history = model.fit(train_images, train_labels, callbacks=[callback], validation_data=(validation_images,validation_labels), epochs = num_epochs)
-#appendHistoryValues(history)
-#step += num_epochs
+history = model.fit(train_images, train_labels, callbacks=[callback], validation_data=(validation_images,validation_labels), epochs = num_epochs)
+appendHistoryValues(history)
+step += num_epochs
 
-#history = model.fit(train_images, train_labels, callbacks=[callback], validation_data=(validation_images,validation_labels), epochs = num_epochs)
-#appendHistoryValues(history)
+history = model.fit(train_images, train_labels, callbacks=[callback], validation_data=(validation_images,validation_labels), epochs = num_epochs)
+appendHistoryValues(history)
+step += num_epochs
 
-#history = model.fit(train_images, train_labels, callbacks=[callback], validation_data=(validation_images,validation_labels), epochs = num_epochs)
-#appendHistoryValues(history)
+history = model.fit(train_images, train_labels, callbacks=[callback], validation_data=(validation_images,validation_labels), epochs = num_epochs)
+appendHistoryValues(history)
+step += num_epochs
 
 model.save("model1_weights.h5")
 
-epochs_range = range(num_epochs*1)
+epochs_range = range(num_epochs*8)
 
 plt.figure(figsize=(8, 8))
 plt.subplot(1, 2, 1)
