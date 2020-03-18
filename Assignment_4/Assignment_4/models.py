@@ -31,10 +31,13 @@ def createModel2():
     inputs = tf.keras.Input(shape=(IMG_WIDTH,IMG_HEIGHT,1))
     x = keras.layers.Conv2D(32, kernel_size=3, padding='same', activation='relu')(inputs)
     x = keras.layers.MaxPooling2D((2, 2))(x)
-    x_shortcut = x
+    x_residual = x
+    x_dense = x
     x = keras.layers.Conv2D(64, kernel_size=3, padding='same', activation='relu')(x)
     x = keras.layers.Conv2D(32, kernel_size=3, padding='same', activation='relu')(x)
-    x = keras.layers.add([x, x_shortcut])
+    x = keras.layers.add([x, x_residual])
+
+    x = keras.layers.Concatenate()([x, x_dense])
 
     #x = keras.layers.MaxPooling2D((2, 2))(x)
     x = keras.layers.Conv2D(64, kernel_size=3, padding='same', activation='relu')(x)

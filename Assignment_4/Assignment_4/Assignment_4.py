@@ -18,7 +18,7 @@ imp.reload(models)
 
 print(tf.__version__)
 
-#batch_size = 128
+
 IMG_HEIGHT = 28
 IMG_WIDTH = 28
 
@@ -73,8 +73,8 @@ train_data_gen = image_gen_train.flow(train_images, train_labels)
 
 
 #model = models.createModel1()
-#model = models.createModel2()
-model = models.createModel3()
+model = models.createModel2()
+#model = models.createModel3()
 
 step = 0
 def scheduler(epoch, lr):
@@ -101,12 +101,11 @@ def appendHistoryValues(history):
     for item in history.history['val_loss']:
         train_val_loss.append(item)
 
-num_epochs = 10
+num_epochs = 1
 print("read the learning rate ---> ", keras.backend.eval(model.optimizer.lr))
 
 #history = model.fit(train_data_gen, callbacks=[callback], validation_data=(validation_images,validation_labels), epochs = num_epochs)
 #appendHistoryValues(history)
-
 
 #history = model.fit(train_data_gen, callbacks=[callback], validation_data=(validation_images,validation_labels), epochs = num_epochs)
 #appendHistoryValues(history)
@@ -122,26 +121,19 @@ step += num_epochs
 #appendHistoryValues(history)
 #step += 10
 
-history = model.fit(train_images, train_labels, callbacks=[callback], validation_data=(validation_images,validation_labels), epochs = num_epochs)
-appendHistoryValues(history)
-step += num_epochs
+#history = model.fit(train_images, train_labels, callbacks=[callback], validation_data=(validation_images,validation_labels), epochs = num_epochs)
+#appendHistoryValues(history)
+#step += num_epochs
 
 #history = model.fit(train_images, train_labels, callbacks=[callback], validation_data=(validation_images,validation_labels), epochs = num_epochs)
 #appendHistoryValues(history)
 
 #history = model.fit(train_images, train_labels, callbacks=[callback], validation_data=(validation_images,validation_labels), epochs = num_epochs)
 #appendHistoryValues(history)
-
-#for x in range(num_epochs):
-#    learning_rate = keras.backend.eval(model.optimizer.lr)
-#    if (epoch_counter % 15 == 0) # applpy learning rate
-#    if (epoch_counter % 20 == 0) #data_augmentation
-#    else history = model.fit(train_data_gen, callbacks=[callback], validation_data=(validation_images,validation_labels), epochs = 1)
-#    epoch_counteer+=1
 
 model.save("model1_weights.h5")
 
-epochs_range = range(num_epochs*4)
+epochs_range = range(num_epochs*1)
 
 plt.figure(figsize=(8, 8))
 plt.subplot(1, 2, 1)
@@ -161,7 +153,14 @@ test_loss, test_acc = model.evaluate(test_images, test_labels, verbose=2)
 print('Test accuracy:', test_acc)
 
 predictions = model.predict(test_images)
+print("predictions[0]", predictions[0])
+predictions = [np.argmax(prediction) for prediction in predictions]
+print("predictions[0] after", predictions[0])
 
+print("shape of predictions: ", len(predictions))
+print("validation shape: ", validation_labels.shape)
+confusion_matrix = tf.math.confusion_matrix(validation_labels, predictions)
+print("confusion matrix: ", confusion_matrix)
 
     
 
